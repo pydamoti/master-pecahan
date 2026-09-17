@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Koki Pecahan - Matematika Kelas 5 SD</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#FF6B35',
+                            yellow: '#FFC042',
+                            teal: '#00A896',
+                            blue: '#028090',
+                            purple: '#6C5CE7',
+                            pink: '#FD79A8',
+                            bg: '#F8FAF9'
+                        }
+                    },
+                    fontFamily: {
+                        fredoka: ['Fredoka', 'sans-serif'],
+                        body: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F0F4F8;
+            background-image: radial-gradient(#CBD5E1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .font-game {
+            font-family: 'Fredoka', cursive, sans-serif;
+        }
+        .fraction-block {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .fraction-block:hover {
+            transform: translateY(-3px) scale(1.02);
+        }
+        .pulse-glow {
+            animation: pulseGlow 2s infinite;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 107, 53, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(255, 107, 53, 0.8); }
+        }
+        .bounce-gentle {
+            animation: bounceGentle 2s infinite;
+        }
+        @keyframes bounceGentle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        /* Custom scrollbar for game panels */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col justify-between">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-white border-b-4 border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="showScreen('mode-selection')">
+                <div class="w-12 h-12 bg-gradient-to-tr from-brand-orange to-brand-yellow rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-md transform -rotate-3">
+                    🍕
+                </div>
+                <div>
+                    <h1 class="font-game text-xl md:text-2xl font-bold text-slate-800 leading-none">Petualangan Koki Pecahan</h1>
+                    <p class="text-xs text-brand-teal font-semibold">Matematika Kelas 5 SD</p>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="flex items-center space-x-3 md:space-x-6">
+                <div class="flex items-center space-x-1.5 bg-amber-50 border-2 border-amber-200 px-3 py-1.5 rounded-xl">
+                    <span class="text-xl">⭐</span>
+                    <span id="star-count" class="font-game font-bold text-amber-700 text-lg">0</span>
+                </div>
+                <div class="flex items-center space-x-1.5 bg-emerald-50 border-2 border-emerald-200 px-3 py-1.5 rounded-xl">
+                    <span class="text-xl">🏆</span>
+                    <span id="score-display" class="font-game font-bold text-emerald-700 text-lg">0 Skor</span>
+                </div>
+                <button id="sound-toggle" onclick="toggleSound()" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 transition text-xl" title="Matikan/Hidupkan Suara">
+                    🔊
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
+
+        <!-- SCREEN 1: MODE SELECTION (HOME) -->
+        <section id="screen-mode-selection" class="space-y-8">
+            <!-- Welcome Banner -->
+            <div class="bg-gradient-to-r from-brand-orange via-amber-500 to-brand-yellow rounded-3xl p-6 md:p-8 text-white shadow-lg relative overflow-hidden">
+                <div class="relative z-10 max-w-2xl">
+                    <span class="inline-block bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
+                        🎯 Fase C - Kelas 5 SD
+                    </span>
+                    <h2 class="font-game text-3xl md:text-4xl font-bold mb-3">Halo, Calon Master Pecahan! 👋</h2>
+                    <p class="text-amber-50 text-sm md:text-base leading-relaxed mb-6">
+                        Bantu Koki Budi dan Ibu memasak resep kue lezat, membagi piza, dan menyelesaikan masalah matematika sehari-hari dengan bantuan <strong>Blok Pecahan Interaktif</strong>!
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <button onclick="startMode('petualangan')" class="bg-white text-brand-orange hover:bg-amber-50 font-game font-bold px-6 py-3 rounded-2xl shadow-md text-lg transition transform hover:-translate-y-0.5 active:translate-y-0 flex items-center space-x-2">
+                            <span>🚀</span>
+                            <span>Mulai Petualangan</span>
+                        </button>
+                        <button onclick="startMode('lab')" class="bg-brand-teal text-white hover:bg-teal-600 font-game font-bold px-6 py-3 rounded-2xl shadow-md text-lg transition transform hover:-translate-y-0.5 flex items-center space-x-2">
+                            <span>🧩</span>
+                            <span>Lab Blok Pecahan</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Decorative Graphic -->
+                <div class="absolute -right-8 -bottom-10 text-9xl opacity-20 pointer-events-none select-none">
+                    🍰
+                </div>
+            </div>
+
+            <!-- Learning Objectives & Category Cards -->
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-game text-2xl font-bold text-slate-800">Pilih Mode Belajar & Bermain</h3>
+                    <span class="text-xs text-slate-500 font-medium">Sesuai Alur RPM Kelas 5</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Mode 1: Eksplorasi Blok Pecahan (Konkret) -->
+                    <div onclick="startMode('lab')" class="bg-white rounded-3xl p-6 border-2 border-teal-100 hover:border-brand-teal shadow-sm hover:shadow-xl transition duration-300 cursor-pointer flex flex-col justify-between group">
+                        <div>
+                            <div class="w-14 h-14 bg-teal-50 border-2 border-teal-200 rounded-2xl flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition">
+                                🧪
+                            </div>
+                            <span class="text-xs font-bold text-brand-teal uppercase tracking-wide">Tahap Eksplorasi</span>
+                            <h4 class="font-game text-xl font-bold text-slate-800 mt-1 mb-2">Laboratorium Blok Pecahan</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Bebas memasangkan penyebut berbeda ($\frac{1}{2}$, $\frac{1}{5}$, $\frac{1}{10}$) dan amati perubahan penyebut setara secara langsung secara visual!
+                            </p>
+                        </div>
+                        <div class="mt-6 flex items-center font-bold text-brand-teal text-sm group-hover:translate-x-1 transition">
+                            <span>Buka Laboratorium</span>
+                            <span class="ml-1">→</span>
+                        </div>
+                    </div>
+
+                    <!-- Mode 2: Petualangan Level (Aplikasi RPM) -->
+                    <div onclick="startMode('petualangan')" class="bg-white rounded-3xl p-6 border-2 border-orange-100 hover:border-brand-orange shadow-sm hover:shadow-xl transition duration-300 cursor-pointer flex flex-col justify-between group">
+                        <div>
+                            <div class="w-14 h-14 bg-orange-50 border-2 border-orange-200 rounded-2xl flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition">
+                                🍳
+                            </div>
+                            <span class="text-xs font-bold text-brand-orange uppercase tracking-wide">Petualangan Utama</span>
+                            <h4 class="font-game text-xl font-bold text-slate-800 mt-1 mb-2">Misi Soal Kontekstual</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Selesaikan tantangan Piza, Jeruk, Resep Tepung Ibu ($1\frac{1}{2} + 3\frac{3}{4}$ kg), hingga Cat Pagar Pak Doni secara bertahap.
+                            </p>
+                        </div>
+                        <div class="mt-6 flex items-center font-bold text-brand-orange text-sm group-hover:translate-x-1 transition">
+                            <span>Mulai Bertualang</span>
+                            <span class="ml-1">→</span>
+                        </div>
+                    </div>
+
+                    <!-- Mode 3: Pengayaan HOTS & Refleksi -->
+                    <div onclick="startMode('hots')" class="bg-white rounded-3xl p-6 border-2 border-purple-100 hover:border-brand-purple shadow-sm hover:shadow-xl transition duration-300 cursor-pointer flex flex-col justify-between group">
+                        <div>
+                            <div class="w-14 h-14 bg-purple-50 border-2 border-purple-200 rounded-2xl flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition">
+                                🌟
+                            </div>
+                            <span class="text-xs font-bold text-brand-purple uppercase tracking-wide">Tantangan Mahir</span>
+                            <h4 class="font-game text-xl font-bold text-slate-800 mt-1 mb-2">Koki Mahir & Refleksi 3-2-1</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Tantangan tinggi dengan 3 pecahan berpenyebut berbeda sekaligus ($1\frac{1}{2} + \frac{2}{3} + 2\frac{1}{4}$) & isi jurnal refleksi belajar!
+                            </p>
+                        </div>
+                        <div class="mt-6 flex items-center font-bold text-brand-purple text-sm group-hover:translate-x-1 transition">
+                            <span>Tantangan HOTS</span>
+                            <span class="ml-1">→</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Objectives Infographic Box -->
+            <div class="bg-slate-800 text-slate-200 rounded-3xl p-6 border border-slate-700">
+                <h4 class="font-game text-lg font-bold text-amber-400 mb-3 flex items-center space-x-2">
+                    <span>📘</span>
+                    <span>Tujuan Pembelajaran (TP) & Capaian Fase C</span>
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs leading-relaxed text-slate-300">
+                    <div class="bg-slate-700/50 p-3 rounded-2xl border border-slate-600">
+                        <strong class="text-white block mb-1">1. Penjumlahan Berpenyebut Beda</strong>
+                        Menggunakan alat peraga manipulatif blok pecahan untuk menyamakan penyebut (KPK) dengan akurat.
+                    </div>
+                    <div class="bg-slate-700/50 p-3 rounded-2xl border border-slate-600">
+                        <strong class="text-white block mb-1">2. Pecahan Campuran</strong>
+                        Memisahkan bilangan bulat dan pecahan biasa atau mengubah menjadi pecahan tidak sejati.
+                    </div>
+                    <div class="bg-slate-700/50 p-3 rounded-2xl border border-slate-600">
+                        <strong class="text-white block mb-1">3. Pemecahan Masalah Nyata</strong>
+                        Menganalisis soal cerita belanja bahan resep kue, jeruk, piza, dan pengukuran kehidupan sehari-hari.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN 2: GAMEPLAY / LEVEL SCREEN -->
+        <section id="screen-gameplay" class="hidden space-y-6">
+            <!-- Level Progress Header -->
+            <div class="flex flex-wrap items-center justify-between bg-white p-4 rounded-2xl border-2 border-slate-200 shadow-sm gap-3">
+                <button onclick="showScreen('mode-selection')" class="flex items-center space-x-2 text-slate-600 hover:text-slate-900 font-bold text-sm bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-xl transition">
+                    <span>←</span>
+                    <span>Menu Utama</span>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <span id="level-badge" class="bg-brand-orange text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                        Level 1 / 6
+                    </span>
+                    <h3 id="level-title" class="font-game text-lg font-bold text-slate-800">Soal Piza Budi & Aris</h3>
+                </div>
+                <button onclick="openHintModal()" class="flex items-center space-x-1.5 bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-bold px-3 py-2 rounded-xl transition">
+                    <span>💡</span>
+                    <span>Bantuan Blok Pecahan</span>
+                </button>
+            </div>
+
+            <!-- Main Interactive Gameplay Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left Column: Story & Visual Manipulative Area -->
+                <div class="lg:col-span-7 bg-white rounded-3xl p-6 border-2 border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <!-- Scenario Story Card -->
+                        <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 mb-6 relative">
+                            <div class="flex items-start space-x-3">
+                                <div id="story-avatar" class="text-4xl select-none">🍕</div>
+                                <div>
+                                    <h4 id="story-speaker" class="font-game font-bold text-amber-900 text-base">Cerita Masalah</h4>
+                                    <p id="story-text" class="text-slate-700 text-sm leading-relaxed mt-1">
+                                        Budi makan $\frac{1}{5}$ piza dan Aris makan $\frac{1}{2}$ piza. Berapa total piza yang sudah mereka makan jika digabungkan?
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Visual Fraction Display -->
+                        <div class="space-y-4">
+                            <h5 class="font-game text-slate-700 text-sm font-bold flex items-center justify-between">
+                                <span>🎨 Visualisasi Alat Peraga (Blok Pecahan)</span>
+                                <span class="text-xs font-normal text-slate-500">Klik blok untuk menyorot</span>
+                            </h5>
+
+                            <!-- Fraction Visual Bars -->
+                            <div id="fraction-visual-container" class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                                <!-- Dynamic JS render -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Equation Banner -->
+                    <div id="visual-equation-box" class="mt-6 bg-slate-900 text-white p-4 rounded-2xl text-center flex items-center justify-center space-x-3 font-game text-xl md:text-2xl">
+                        <!-- Dynamic JS render equation -->
+                    </div>
+                </div>
+
+                <!-- Right Column: Interactive Step-by-Step Solver -->
+                <div class="lg:col-span-5 bg-white rounded-3xl p-6 border-2 border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4 pb-2 border-b border-slate-100">
+                            <h4 class="font-game font-bold text-slate-800 text-lg">Langkah Penyelesaian</h4>
+                            <span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg font-semibold">Alur Berpikir</span>
+                        </div>
+
+                        <!-- Interactive Input Form -->
+                        <div id="solver-steps-container" class="space-y-5">
+                            <!-- STEP 1: Find LCM (Samakan Penyebut) -->
+                            <div id="step-1-card" class="p-4 bg-orange-50/70 border-2 border-orange-200 rounded-2xl space-y-2">
+                                <label class="block text-xs font-bold text-brand-orange uppercase">Langkah 1: Cari KPK Penyebut</label>
+                                <p id="step-1-prompt" class="text-xs text-slate-600">
+                                    Berapa KPK dari penyebut 5 dan 2 agar ukuran bloknya sama?
+                                </p>
+                                <div class="flex items-center space-x-2 pt-1">
+                                    <input type="number" id="input-lcm" placeholder="KPK..." class="w-24 px-3 py-2 border-2 border-slate-300 rounded-xl font-game text-center focus:border-brand-orange focus:outline-none text-lg">
+                                    <button onclick="checkStep1()" class="bg-brand-orange text-white font-game font-bold px-4 py-2 rounded-xl hover:bg-orange-600 transition text-sm">
+                                        Cek KPK
+                                    </button>
+                                </div>
+                                <p id="step-1-feedback" class="text-xs font-semibold hidden"></p>
+                            </div>
+
+                            <!-- STEP 2: Equivalent Fractions (Pecahan Senilai) -->
+                            <div id="step-2-card" class="p-4 bg-slate-50 border-2 border-slate-200 rounded-2xl space-y-3 opacity-50 pointer-events-none transition">
+                                <label class="block text-xs font-bold text-brand-teal uppercase">Langkah 2: Ubah ke Pecahan Senilai</label>
+                                <div id="step-2-inputs-container" class="space-y-2">
+                                    <!-- Dynamic JS inputs -->
+                                </div>
+                                <button onclick="checkStep2()" class="w-full bg-brand-teal text-white font-game font-bold py-2 rounded-xl hover:bg-teal-600 transition text-sm">
+                                    Ubah Pecahan
+                                </button>
+                                <p id="step-2-feedback" class="text-xs font-semibold hidden"></p>
+                            </div>
+
+                            <!-- STEP 3: Final Answer (Hasil Penjumlahan & Pecahan Campuran/Sederhana) -->
+                            <div id="step-3-card" class="p-4 bg-slate-50 border-2 border-slate-200 rounded-2xl space-y-3 opacity-50 pointer-events-none transition">
+                                <label class="block text-xs font-bold text-brand-purple uppercase">Langkah 3: Jumlahkan & Sederhanakan</label>
+                                <div class="flex items-center justify-center space-x-2 text-slate-700">
+                                    <!-- Whole number input for mixed fraction if needed -->
+                                    <input type="number" id="input-final-whole" placeholder="Utuh" class="w-16 px-2 py-2 border-2 border-slate-300 rounded-xl font-game text-center focus:border-brand-purple focus:outline-none text-base hidden">
+                                    
+                                    <div class="flex flex-col items-center">
+                                        <input type="number" id="input-final-num" placeholder="Pembilang" class="w-20 px-2 py-1.5 border-2 border-slate-300 rounded-xl font-game text-center focus:border-brand-purple focus:outline-none text-base">
+                                        <div class="w-full border-b-2 border-slate-800 my-1"></div>
+                                        <input type="number" id="input-final-den" placeholder="Penyebut" class="w-20 px-2 py-1.5 border-2 border-slate-300 rounded-xl font-game text-center focus:border-brand-purple focus:outline-none text-base">
+                                    </div>
+                                </div>
+                                <button onclick="checkStep3()" class="w-full bg-brand-purple text-white font-game font-bold py-2.5 rounded-xl hover:bg-purple-700 transition text-sm shadow-md">
+                                    Kirim Jawaban Akhir ✨
+                                </button>
+                                <p id="step-3-feedback" class="text-xs font-semibold hidden"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Next/Prev -->
+                    <div class="mt-6 flex items-center justify-between pt-4 border-t border-slate-100">
+                        <button id="btn-prev-level" onclick="navigateLevel(-1)" class="text-xs text-slate-500 font-bold hover:text-slate-800 transition">
+                            ← Level Sebelumnya
+                        </button>
+                        <button id="btn-next-level" onclick="navigateLevel(1)" class="bg-emerald-500 hover:bg-emerald-600 text-white font-game font-bold px-4 py-2 rounded-xl text-xs transition shadow hidden">
+                            Lanjut Level Berikutnya →
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN 3: FRACTION LAB (EKSPLORASI MANDIRI) -->
+        <section id="screen-lab" class="hidden space-y-6">
+            <div class="flex items-center justify-between bg-white p-4 rounded-2xl border-2 border-slate-200">
+                <button onclick="showScreen('mode-selection')" class="flex items-center space-x-2 text-slate-600 hover:text-slate-900 font-bold text-sm bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-xl transition">
+                    <span>←</span>
+                    <span>Kembali</span>
+                </button>
+                <div class="text-center">
+                    <h3 class="font-game text-xl font-bold text-slate-800">🧪 Laboratorium Eksplorasi Blok Pecahan</h3>
+                    <p class="text-xs text-slate-500">Uji coba bebas menyamakan ukuran pecahan dengan alat peraga visual</p>
+                </div>
+                <div class="w-24"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                <!-- Inputs Controller -->
+                <div class="md:col-span-4 bg-white p-6 rounded-3xl border-2 border-slate-200 shadow-sm space-y-6">
+                    <h4 class="font-game text-lg font-bold text-slate-800 border-b pb-2">Atur Pecahan Pertama & Kedua</h4>
+
+                    <!-- Pecahan 1 Input -->
+                    <div class="bg-orange-50 p-4 rounded-2xl border border-orange-200 space-y-3">
+                        <span class="text-xs font-bold text-brand-orange uppercase">Pecahan A</span>
+                        <div class="flex items-center space-x-3">
+                            <label class="text-sm font-semibold text-slate-700">Pembilang:</label>
+                            <input type="number" id="lab-num1" value="1" min="1" max="12" class="w-16 p-2 border-2 border-slate-300 rounded-xl text-center font-game font-bold">
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <label class="text-sm font-semibold text-slate-700">Penyebut:</label>
+                            <select id="lab-den1" class="p-2 border-2 border-slate-300 rounded-xl font-game font-bold">
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5" selected>5</option>
+                                <option value="6">6</option>
+                                <option value="8">8</option>
+                                <option value="10">10</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Pecahan 2 Input -->
+                    <div class="bg-teal-50 p-4 rounded-2xl border border-teal-200 space-y-3">
+                        <span class="text-xs font-bold text-brand-teal uppercase">Pecahan B</span>
+                        <div class="flex items-center space-x-3">
+                            <label class="text-sm font-semibold text-slate-700">Pembilang:</label>
+                            <input type="number" id="lab-num2" value="1" min="1" max="12" class="w-16 p-2 border-2 border-slate-300 rounded-xl text-center font-game font-bold">
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <label class="text-sm font-semibold text-slate-700">Penyebut:</label>
+                            <select id="lab-den2" class="p-2 border-2 border-slate-300 rounded-xl font-game font-bold">
+                                <option value="2" selected>2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="8">8</option>
+                                <option value="10">10</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button onclick="updateLabVisualization()" class="w-full bg-brand-teal text-white font-game font-bold py-3 rounded-2xl hover:bg-teal-600 transition shadow">
+                        🔄 Visualisasikan Blok
+                    </button>
+                </div>
+
+                <!-- Visualization & Unification Output -->
+                <div class="md:col-span-8 bg-white p-6 rounded-3xl border-2 border-slate-200 shadow-sm space-y-6">
+                    <h4 class="font-game text-lg font-bold text-slate-800 border-b pb-2">Perbandingan & Penyetaraan Unit Blok</h4>
+
+                    <div id="lab-visual-render" class="space-y-6">
+                        <!-- JS Dynamic renders -->
+                    </div>
+
+                    <!-- Explanation Box -->
+                    <div id="lab-explanation-box" class="bg-slate-900 text-white p-5 rounded-2xl space-y-2">
+                        <!-- JS explanation -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN 4: REFLECTION 3-2-1 (ASESMEN METAKOGNISI RPM) -->
+        <section id="screen-reflection" class="hidden space-y-6">
+            <div class="bg-white p-6 md:p-8 rounded-3xl border-2 border-slate-200 shadow-sm max-w-3xl mx-auto space-y-6">
+                <div class="text-center space-y-2">
+                    <span class="text-4xl">📝</span>
+                    <h3 class="font-game text-2xl font-bold text-slate-800">Lembar Refleksi Diri Murid (3-2-1)</h3>
+                    <p class="text-xs text-slate-500">
+                        Sesuai Panduan Asesmen RPM Kelas 5 SD - Evaluasi Metakognisi & Pembelajaran Mandiri
+                    </p>
+                </div>
+
+                <form id="reflection-form" onsubmit="saveReflection(event)" class="space-y-6">
+                    <!-- 3 Hal baru -->
+                    <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 space-y-2">
+                        <label class="block font-game font-bold text-amber-900 text-sm">
+                            3 Hal baru yang aku pelajari hari ini:
+                        </label>
+                        <textarea id="ref-3" rows="2" placeholder="Contoh: Menyamakan penyebut dengan KPK, penjumlahan pecahan campuran..." class="w-full p-3 border border-amber-300 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-amber-500" required></textarea>
+                    </div>
+
+                    <!-- 2 Hal menarik -->
+                    <div class="bg-teal-50 p-4 rounded-2xl border border-teal-200 space-y-2">
+                        <label class="block font-game font-bold text-teal-900 text-sm">
+                            2 Hal yang paling menarik saat menggunakan blok pecahan:
+                        </label>
+                        <textarea id="ref-2" rows="2" placeholder="Contoh: Melihat ukuran blok piza berubah, memisahkan angka bulat..." class="w-full p-3 border border-teal-300 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-teal-500" required></textarea>
+                    </div>
+
+                    <!-- 1 Pertanyaan -->
+                    <div class="bg-purple-50 p-4 rounded-2xl border border-purple-200 space-y-2">
+                        <label class="block font-game font-bold text-purple-900 text-sm">
+                            1 Hal/Pertanyaan yang masih membuat aku penasaran/bingung:
+                        </label>
+                        <textarea id="ref-1" rows="2" placeholder="Contoh: Bagaimana kalau penyebutnya angka sangat besar..." class="w-full p-3 border border-purple-300 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-purple-500" required></textarea>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-2">
+                        <button type="button" onclick="showScreen('mode-selection')" class="text-xs font-bold text-slate-500 hover:text-slate-800">
+                            Kembali ke Menu
+                        </button>
+                        <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 text-white font-game font-bold px-6 py-3 rounded-2xl shadow transition text-sm">
+                            Simpan Refleksi & Cetak Laporan 🎓
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Saved Reflection Summary -->
+                <div id="reflection-summary" class="hidden bg-slate-900 text-white p-6 rounded-2xl space-y-4">
+                    <h4 class="font-game text-lg text-amber-400 font-bold border-b border-slate-700 pb-2">Rapor Refleksi Pembelajaran</h4>
+                    <div id="reflection-output" class="text-xs space-y-3 leading-relaxed"></div>
+                    <button onclick="window.print()" class="bg-amber-500 text-slate-900 font-game font-bold px-4 py-2 rounded-xl text-xs hover:bg-amber-400 transition">
+                        🖨️ Cetak / Simpan Laporan
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- HINT & PEDAGOGY MODAL -->
+    <div id="hint-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border-4 border-amber-300 animate-bounce-gentle">
+            <div class="flex items-center justify-between border-b pb-2">
+                <h3 class="font-game text-xl font-bold text-amber-900 flex items-center space-x-2">
+                    <span>💡</span>
+                    <span>Petunjuk Blok Pecahan (RPM)</span>
+                </h3>
+                <button onclick="closeHintModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+            </div>
+            <div class="text-xs text-slate-700 space-y-3 leading-relaxed">
+                <p><strong>1. Penjumlahan Berpenyebut Beda:</strong> Ukuran potongan pecahan belum sama! Kita tidak bisa langsung menjumlahkan pembilang jika penyebutnya beda ($1+2$).</p>
+                <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
+                    <strong>Contoh:</strong> $\frac{1}{5} + \frac{1}{2}$
+                    <br>Cari KPK dari 5 dan 2, yaitu <strong>10</strong>.
+                    <br>$\frac{1}{5} = \frac{2}{10}$ dan $\frac{1}{2} = \frac{5}{10}$.
+                    <br>Hasil: $\frac{2}{10} + \frac{5}{10} = \frac{7}{10}$.
+                </div>
+                <p><strong>2. Pecahan Campuran:</strong> Pisahkan bilangan bulat terlebih dahulu, lalu samakan penyebut pada bagian pecahannya!</p>
+            </div>
+            <button onclick="closeHintModal()" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-game font-bold py-2.5 rounded-xl transition text-sm">
+                Mengerti, Siap Melanjutkan!
+            </button>
+        </div>
+    </div>
+
+    <script>
+        /* WEB AUDIO API SYNTHESIZER FOR SOUND EFFECTS */
+        let audioCtx = null;
+        let isSoundOn = true;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSound(type) {
+            if (!isSoundOn) return;
+            initAudio();
+            if (!audioCtx) return;
+
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+
+                if (type === 'correct') {
+                    // Happy arpeggio
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                    osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+                } else if (type === 'wrong') {
+                    // Gentle low buzz
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.setValueAtTime(130, now + 0.15);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, now);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                }
+            } catch (e) {
+                console.log("Audio play error", e);
+            }
+        }
+
+        function toggleSound() {
+            isSoundOn = !isSoundOn;
+            document.getElementById('sound-toggle').innerText = isSoundOn ? '🔊' : '🔇';
+        }
+
+        // Math Utilities for Fractions
+        function gcd(a, b) {
+            return b === 0 ? a : gcd(b, a % b);
+        }
+
+        function lcm(a, b) {
+            return (a * b) / gcd(a, b);
+        }
+
+        function simplifyFraction(num, den) {
+            const common = gcd(num, den);
+            return {
+                num: num / common,
+                den: den / common
+            };
+        }
+
+        // Game State Management
+        let gameState = {
+            currentLevelIndex: 0,
+            score: 0,
+            stars: 0,
+            levelProgress: [0, 0, 0, 0, 0, 0]
+        };
+
+        // Level Definitions based on RPM Curriculum
+        const LEVEL_DATABASE = [
+            {
+                id: 1,
+                title: "Pertanyaan Pemantik 1: Piza Budi & Aris",
+                speaker: "Budi & Aris (RPM Hal. 2)",
+                avatar: "🍕",
+                type: "simple_diff",
+                story: "Budi makan 1/5 bagian piza dan Aris makan 1/2 bagian piza. Berapa total bagian piza yang sudah habis dimakan jika digabungkan?",
+                fractions: [
+                    { num: 1, den: 5 },
+                    { num: 1, den: 2 }
+                ],
+                targetLcm: 10,
+                converted: [
+                    { num: 2, den: 10 },
+                    { num: 5, den: 10 }
+                ],
+                finalResult: { whole: 0, num: 7, den: 10 },
+                hint: "Penyebutnya 5 dan 2. Cari kelipatan terkecil yang sama (KPK = 10)."
+            },
+            {
+                id: 2,
+                title: "Pertanyaan Pemantik 2: Jeruk Kakak & Adik",
+                speaker: "Kakak & Adik (RPM Hal. 2)",
+                avatar: "🍊",
+                type: "simple_same",
+                story: "Ibu mengupas 1 buah jeruk berisi 10 siung sama besar. Kakak mengambil 3/10 bagian dan Adik mengambil 4/10 bagian. Berapa total bagian jeruk Kakak & Adik?",
+                fractions: [
+                    { num: 3, den: 10 },
+                    { num: 4, den: 10 }
+                ],
+                targetLcm: 10,
+                converted: [
+                    { num: 3, den: 10 },
+                    { num: 4, den: 10 }
+                ],
+                finalResult: { whole: 0, num: 7, den: 10 },
+                hint: "Penyebutnya sudah sama (10)! Tinggal jumlahkan pembilangnya saja."
+            },
+            {
+                id: 3,
+                title: "Studi Kasus 1 LKM: Tepung Terigu Ibu",
+                speaker: "Resep Kue Ibu (RPM Hal. 4)",
+                avatar: "🧁",
+                type: "mixed",
+                story: "Ibu membeli 1 1/2 kg tepung terigu untuk membuat kue. Ternyata kurang, lalu Ibu membeli lagi 3 3/4 kg tepung terigu. Berapa kg total berat tepung terigu Ibu?",
+                fractions: [
+                    { whole: 1, num: 1, den: 2 },
+                    { whole: 3, num: 3, den: 4 }
+                ],
+                targetLcm: 4,
+                converted: [
+                    { whole: 1, num: 2, den: 4 },
+                    { whole: 3, num: 3, den: 4 }
+                ],
+                finalResult: { whole: 5, num: 1, den: 4 }, // 1 2/4 + 3 3/4 = 4 5/4 = 5 1/4
+                hint: "Jumlahkan bagian bulat (1 + 3 = 4), lalu samakan penyebut pecahan (1/2 = 2/4). Total = 4 + 5/4 = 5 1/4."
+            },
+            {
+                id: 4,
+                title: "Studi Kasus 2 LKM: Cat Pagar Pak Doni",
+                speaker: "Pak Doni (RPM Hal. 4)",
+                avatar: "🎨",
+                type: "mixed_simple",
+                story: "Pak Doni mengecat pagar rumahnya. Pagi hari ia menyelesaikan 2/5 bagian, dan sore hari menyelesaikan 1 1/3 bagian lagi. Berapa total bagian pagar yang telah dicat?",
+                fractions: [
+                    { whole: 0, num: 2, den: 5 },
+                    { whole: 1, num: 1, den: 3 }
+                ],
+                targetLcm: 15,
+                converted: [
+                    { whole: 0, num: 6, den: 15 },
+                    { whole: 1, num: 5, den: 15 }
+                ],
+                finalResult: { whole: 1, num: 11, den: 15 },
+                hint: "KPK dari 5 dan 3 adalah 15. Ubah 2/5 jadi 6/15 dan 1/3 jadi 5/15."
+            },
+            {
+                id: 5,
+                title: "Evaluasi Formatif: Gula Jawa & Tepung Beras",
+                speaker: "Bahan Kue Tradisional (RPM Hal. 7)",
+                avatar: "🍡",
+                type: "mixed",
+                story: "Ibu membeli 1 3/4 kg gula jawa dan 2 1/2 kg tepung beras untuk persiapan membuat kue tradisional. Berapa kg total berat seluruh belanjaan Ibu?",
+                fractions: [
+                    { whole: 1, num: 3, den: 4 },
+                    { whole: 2, num: 1, den: 2 }
+                ],
+                targetLcm: 4,
+                converted: [
+                    { whole: 1, num: 3, den: 4 },
+                    { whole: 2, num: 2, den: 4 }
+                ],
+                finalResult: { whole: 4, num: 1, den: 4 }, // 3 + 5/4 = 4 1/4
+                hint: "1 + 2 = 3. Pecahan: 3/4 + 2/4 = 5/4 = 1 1/4. Jadi 3 + 1 1/4 = 4 1/4 kg."
+            },
+            {
+                id: 6,
+                title: "Tantangan Koki Mahir (HOTS 3 Pecahan)",
+                speaker: "Resep Spesial Koki (RPM Hal. 11)",
+                avatar: "👨‍🍳",
+                type: "hots_three",
+                story: "Koki meracik resep rahasia dengan tiga bahan: 1 1/2 kg gula, 2/3 kg mentega, dan 2 1/4 kg tepung. Berapa total berat gabungan ketiga bahan tersebut?",
+                fractions: [
+                    { whole: 1, num: 1, den: 2 },
+                    { whole: 0, num: 2, den: 3 },
+                    { whole: 2, num: 1, den: 4 }
+                ],
+                targetLcm: 12,
+                converted: [
+                    { whole: 1, num: 6, den: 12 },
+                    { whole: 0, num: 8, den: 12 },
+                    { whole: 2, num: 3, den: 12 }
+                ],
+                finalResult: { whole: 4, num: 5, den: 12 }, // 3 + 17/12 = 4 5/12
+                hint: "Cari KPK dari 2, 3, dan 4 yaitu 12! Ubah ke per-12, lalu jumlahkan pembilang dan sederhanakan."
+            }
+        ];
+
+        // Render Fraction Visual Bars (Visual Manipulatives)
+        function renderFractionBars(level) {
+            const container = document.getElementById('fraction-visual-container');
+            container.innerHTML = '';
+
+            level.fractions.forEach((f, idx) => {
+                const colorClass = idx === 0 ? 'bg-orange-500' : idx === 1 ? 'bg-teal-500' : 'bg-purple-500';
+                const label = `Pecahan ${idx + 1}` + (f.whole ? ` (${f.whole} Utuh + ${f.num}/${f.den})` : ` (${f.num}/${f.den})`);
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'space-y-1';
+
+                const header = document.createElement('div');
+                header.className = 'flex justify-between text-xs font-bold text-slate-700';
+                header.innerHTML = `<span>${label}</span> <span>${f.num}/${f.den} Unit</span>`;
+                wrapper.appendChild(header);
+
+                // Bar Container
+                const barBox = document.createElement('div');
+                barBox.className = 'w-full h-10 bg-slate-200 rounded-xl overflow-hidden flex border-2 border-slate-300 p-0.5 space-x-0.5';
+
+                // Render blocks
+                for (let i = 0; i < f.den; i++) {
+                    const block = document.createElement('div');
+                    const isFilled = i < f.num;
+                    block.style.width = `${100 / f.den}%`;
+                    block.className = `h-full rounded-lg text-[10px] font-bold flex items-center justify-center transition-all ${
+                        isFilled ? colorClass + ' text-white shadow-inner' : 'bg-slate-100 text-slate-400 opacity-60'
+                    }`;
+                    block.innerText = `1/${f.den}`;
+                    barBox.appendChild(block);
+                }
+
+                wrapper.appendChild(barBox);
+                container.appendChild(wrapper);
+            });
+
+            // Update Visual Equation Text Box
+            const eqBox = document.getElementById('visual-equation-box');
+            let eqText = level.fractions.map(f => {
+                if (f.whole) return `${f.whole} <sup>${f.num}</sup>/<sub>${f.den}</sub>`;
+                return `<sup>${f.num}</sup>/<sub>${f.den}</sub>`;
+            }).join(' + ');
+
+            eqBox.innerHTML = `<span>${eqText}</span> <span class="text-amber-400 font-bold">= ?</span>`;
+        }
+
+        // Load Level Logic
+        function loadLevel(index) {
+            gameState.currentLevelIndex = index;
+            const lvl = LEVEL_DATABASE[index];
+
+            // Update UI Headers
+            document.getElementById('level-badge').innerText = `Level ${lvl.id} / ${LEVEL_DATABASE.length}`;
+            document.getElementById('level-title').innerText = lvl.title;
+            document.getElementById('story-avatar').innerText = lvl.avatar;
+            document.getElementById('story-speaker').innerText = lvl.speaker;
+            document.getElementById('story-text').innerText = lvl.story;
+
+            // Render Visual Manipulatives
+            renderFractionBars(lvl);
+
+            // Reset Input Cards State
+            document.getElementById('input-lcm').value = '';
+            document.getElementById('step-1-feedback').className = 'text-xs font-semibold hidden';
+            
+            const step2Card = document.getElementById('step-2-card');
+            step2Card.className = 'p-4 bg-slate-50 border-2 border-slate-200 rounded-2xl space-y-3 opacity-50 pointer-events-none transition';
+            document.getElementById('step-2-feedback').className = 'text-xs font-semibold hidden';
+
+            const step3Card = document.getElementById('step-3-card');
+            step3Card.className = 'p-4 bg-slate-50 border-2 border-slate-200 rounded-2xl space-y-3 opacity-50 pointer-events-none transition';
+            document.getElementById('step-3-feedback').className = 'text-xs font-semibold hidden';
+
+            // Reset Final Inputs
+            document.getElementById('input-final-whole').value = '';
+            document.getElementById('input-final-num').value = '';
+            document.getElementById('input-final-den').value = '';
+
+            // Show/Hide Mixed Fraction Whole Input
+            if (lvl.finalResult.whole > 0) {
+                document.getElementById('input-final-whole').classList.remove('hidden');
+            } else {
+                document.getElementById('input-final-whole').classList.add('hidden');
+            }
+
+            // Build Dynamic Step 2 Inputs
+            const step2Container = document.getElementById('step-2-inputs-container');
+            step2Container.innerHTML = '';
+
+            lvl.fractions.forEach((f, idx) => {
+                const row = document.createElement('div');
+                row.className = 'flex items-center space-x-2 text-xs font-bold text-slate-700';
+                
+                let wholeLabel = f.whole ? `${f.whole} ` : '';
+                row.innerHTML = `
+                    <span>${wholeLabel}${f.num}/${f.den} = ${wholeLabel}</span>
+                    <input type="number" id="step2-num-${idx}" placeholder="Pembilang" class="w-20 p-1.5 border-2 border-slate-300 rounded-lg text-center font-game">
+                    <span>/ ${lvl.targetLcm}</span>
+                `;
+                step2Container.appendChild(row);
+            });
+
+            // Update Navigation Button States
+            document.getElementById('btn-prev-level').style.visibility = index === 0 ? 'hidden' : 'visible';
+            document.getElementById('btn-next-level').classList.add('hidden');
+        }
+
+        // Step 1 Validation (KPK)
+        function checkStep1() {
+            playSound('click');
+            const lvl = LEVEL_DATABASE[gameState.currentLevelIndex];
+            const userLcm = parseInt(document.getElementById('input-lcm').value);
+            const feedback = document.getElementById('step-1-feedback');
+
+            if (userLcm === lvl.targetLcm) {
+                playSound('correct');
+                feedback.innerText = "✨ Hebat! KPK penyebut benar (" + lvl.targetLcm + "). Sekarang ubah pecahan menjadi penyebut setara!";
+                feedback.className = "text-xs font-semibold text-emerald-600 block mt-1";
+
+                // Unlock Step 2
+                const step2Card = document.getElementById('step-2-card');
+                step2Card.classList.remove('opacity-50', 'pointer-events-none', 'bg-slate-50');
+                step2Card.classList.add('bg-teal-50/70', 'border-teal-200');
+            } else {
+                playSound('wrong');
+                feedback.innerText = "❌ Kurang tepat. Coba lagi! " + lvl.hint;
+                feedback.className = "text-xs font-semibold text-rose-600 block mt-1";
+            }
+        }
+
+        // Step 2 Validation (Equivalent Fractions)
+        function checkStep2() {
+            playSound('click');
+            const lvl = LEVEL_DATABASE[gameState.currentLevelIndex];
+            const feedback = document.getElementById('step-2-feedback');
+
+            let allCorrect = true;
+            lvl.converted.forEach((c, idx) => {
+                const userNum = parseInt(document.getElementById(`step2-num-${idx}`).value);
+                if (userNum !== c.num) {
+                    allCorrect = false;
+                }
+            });
+
+            if (allCorrect) {
+                playSound('correct');
+                feedback.innerText = "🎉 Bagus sekali! Pembilang setara sudah benar. Sekarang hitung hasil akhir!";
+                feedback.className = "text-xs font-semibold text-emerald-600 block mt-1";
+
+                // Unlock Step 3
+                const step3Card = document.getElementById('step-3-card');
+                step3Card.classList.remove('opacity-50', 'pointer-events-none', 'bg-slate-50');
+                step3Card.classList.add('bg-purple-50/70', 'border-purple-200');
+            } else {
+                playSound('wrong');
+                feedback.innerText = "❌ Ada pembilang pecahan setara yang belum tepat. Ingat: kalikan pembilang dan penyebut dengan angka yang sama!";
+                feedback.className = "text-xs font-semibold text-rose-600 block mt-1";
+            }
+        }
+
+        // Step 3 Validation (Final Answer)
+        function checkStep3() {
+            playSound('click');
+            const lvl = LEVEL_DATABASE[gameState.currentLevelIndex];
+            const feedback = document.getElementById('step-3-feedback');
+
+            const userWhole = parseInt(document.getElementById('input-final-whole').value) || 0;
+            const userNum = parseInt(document.getElementById('input-final-num').value);
+            const userDen = parseInt(document.getElementById('input-final-den').value);
+
+            const target = lvl.finalResult;
+
+            if (userWhole === target.whole && userNum === target.num && userDen === target.den) {
+                playSound('correct');
+                feedback.innerText = "🌟 LUAR BIASA! Jawaban kamu 100% Benar!";
+                feedback.className = "text-xs font-semibold text-emerald-600 block mt-1";
+
+                // Award points & star
+                if (gameState.levelProgress[gameState.currentLevelIndex] === 0) {
+                    gameState.score += 100;
+                    gameState.stars += 1;
+                    gameState.levelProgress[gameState.currentLevelIndex] = 1;
+                    updateScoreDisplay();
+                }
+
+                // Show Next Button
+                document.getElementById('btn-next-level').classList.remove('hidden');
+            } else {
+                playSound('wrong');
+                feedback.innerText = `❌ Hasil belum pas. Pastikan pecahan sudah sederhana/campuran jika pembilang > penyebut!`;
+                feedback.className = "text-xs font-semibold text-rose-600 block mt-1";
+            }
+        }
+
+        function navigateLevel(direction) {
+            playSound('click');
+            const newIndex = gameState.currentLevelIndex + direction;
+            if (newIndex >= 0 && newIndex < LEVEL_DATABASE.length) {
+                loadLevel(newIndex);
+            } else if (newIndex >= LEVEL_DATABASE.length) {
+                // Completed all levels -> go to reflection
+                showScreen('reflection');
+            }
+        }
+
+        function updateScoreDisplay() {
+            document.getElementById('score-display').innerText = `${gameState.score} Skor`;
+            document.getElementById('star-count').innerText = gameState.stars;
+        }
+
+        // NAVIGATION SCREEN SWITCHER
+        function showScreen(screenId) {
+            playSound('click');
+            document.getElementById('screen-mode-selection').classList.add('hidden');
+            document.getElementById('screen-gameplay').classList.add('hidden');
+            document.getElementById('screen-lab').classList.add('hidden');
+            document.getElementById('screen-reflection').classList.add('hidden');
+
+            document.getElementById(`screen-${screenId}`).classList.remove('hidden');
+
+            if (screenId === 'lab') {
+                updateLabVisualization();
+            }
+        }
+
+        function startMode(mode) {
+            if (mode === 'petualangan') {
+                showScreen('gameplay');
+                loadLevel(0);
+            } else if (mode === 'lab') {
+                showScreen('lab');
+            } else if (mode === 'hots') {
+                showScreen('gameplay');
+                loadLevel(5); // HOTS level index
+            }
+        }
+
+        // FRACTION LAB DYNAMIC VISUALIZER
+        function updateLabVisualization() {
+            const num1 = parseInt(document.getElementById('lab-num1').value) || 1;
+            const den1 = parseInt(document.getElementById('lab-den1').value) || 2;
+            const num2 = parseInt(document.getElementById('lab-num2').value) || 1;
+            const den2 = parseInt(document.getElementById('lab-den2').value) || 2;
+
+            const commonLcm = lcm(den1, den2);
+            const convNum1 = num1 * (commonLcm / den1);
+            const convNum2 = num2 * (commonLcm / den2);
+            const totalNum = convNum1 + convNum2;
+
+            const container = document.getElementById('lab-visual-render');
+            container.innerHTML = `
+                <!-- Original Bars -->
+                <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border">
+                    <h5 class="text-xs font-bold text-slate-700">1. Ukuran Blok Asli (Penyebut Beda)</h5>
+                    
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-orange-700 mb-1">
+                            <span>Blok A (${num1}/${den1})</span>
+                        </div>
+                        <div class="w-full h-8 bg-slate-200 rounded-lg flex overflow-hidden border">
+                            ${Array.from({length: den1}).map((_, i) => `
+                                <div style="width: ${100/den1}%" class="h-full ${i < num1 ? 'bg-orange-500 text-white' : 'bg-slate-100 text-slate-400'} text-[10px] font-bold flex items-center justify-center border-r border-white/20">
+                                    1/${den1}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-teal-700 mb-1">
+                            <span>Blok B (${num2}/${den2})</span>
+                        </div>
+                        <div class="w-full h-8 bg-slate-200 rounded-lg flex overflow-hidden border">
+                            ${Array.from({length: den2}).map((_, i) => `
+                                <div style="width: ${100/den2}%" class="h-full ${i < num2 ? 'bg-teal-500 text-white' : 'bg-slate-100 text-slate-400'} text-[10px] font-bold flex items-center justify-center border-r border-white/20">
+                                    1/${den2}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Unified KPK Bars -->
+                <div class="space-y-3 bg-amber-50 p-4 rounded-2xl border border-amber-200">
+                    <h5 class="text-xs font-bold text-amber-900">2. Penyetaraan Unit Blok (KPK = ${commonLcm})</h5>
+                    
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-orange-800 mb-1">
+                            <span>Setara Blok A (${convNum1}/${commonLcm})</span>
+                        </div>
+                        <div class="w-full h-8 bg-slate-200 rounded-lg flex overflow-hidden border">
+                            ${Array.from({length: commonLcm}).map((_, i) => `
+                                <div style="width: ${100/commonLcm}%" class="h-full ${i < convNum1 ? 'bg-orange-600 text-white' : 'bg-slate-100 text-slate-400'} text-[9px] font-bold flex items-center justify-center border-r border-white/20">
+                                    1/${commonLcm}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold text-teal-800 mb-1">
+                            <span>Setara Blok B (${convNum2}/${commonLcm})</span>
+                        </div>
+                        <div class="w-full h-8 bg-slate-200 rounded-lg flex overflow-hidden border">
+                            ${Array.from({length: commonLcm}).map((_, i) => `
+                                <div style="width: ${100/commonLcm}%" class="h-full ${i < convNum2 ? 'bg-teal-600 text-white' : 'bg-slate-100 text-slate-400'} text-[9px] font-bold flex items-center justify-center border-r border-white/20">
+                                    1/${commonLcm}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Explanation Box
+            const expBox = document.getElementById('lab-explanation-box');
+            expBox.innerHTML = `
+                <div class="font-game text-amber-400 text-base font-bold">Hasil Penjumlahan Lab:</div>
+                <div class="text-sm">
+                    <sup>${num1}</sup>/<sub>${den1}</sub> + <sup>${num2}</sup>/<sub>${den2}</sub> = 
+                    <sup>${convNum1}</sup>/<sub>${commonLcm}</sub> + <sup>${convNum2}</sup>/<sub>${commonLcm}</sub> = 
+                    <strong class="text-emerald-400 text-lg"><sup>${totalNum}</sup>/<sub>${commonLcm}</sub></strong>
+                </div>
+                <div class="text-xs text-slate-300 mt-1">
+                    KPK dari penyebut ${den1} dan ${den2} adalah <strong>${commonLcm}</strong>. Kedua blok pecahan kini dipotong menjadi ukuran unit 1/${commonLcm} yang persis sama!
+                </div>
+            `;
+        }
+
+        // REFLECTION FORM HANDLER
+        function saveReflection(event) {
+            event.preventDefault();
+            playSound('correct');
+            const r3 = document.getElementById('ref-3').value;
+            const r2 = document.getElementById('ref-2').value;
+            const r1 = document.getElementById('ref-1').value;
+
+            const output = document.getElementById('reflection-output');
+            output.innerHTML = `
+                <div class="p-3 bg-slate-800 rounded-xl">
+                    <strong class="text-amber-400 block mb-1">3 Hal Baru yang Dipelajari:</strong>
+                    <p class="text-slate-200">${r3}</p>
+                </div>
+                <div class="p-3 bg-slate-800 rounded-xl">
+                    <strong class="text-teal-400 block mb-1">2 Hal Paling Menarik:</strong>
+                    <p class="text-slate-200">${r2}</p>
+                </div>
+                <div class="p-3 bg-slate-800 rounded-xl">
+                    <strong class="text-purple-400 block mb-1">1 Pertanyaan / Masih Bingung:</strong>
+                    <p class="text-slate-200">${r1}</p>
+                </div>
+            `;
+
+            document.getElementById('reflection-summary').classList.remove('hidden');
+        }
+
+        // MODAL HANDLERS
+        function openHintModal() {
+            playSound('click');
+            document.getElementById('hint-modal').classList.remove('hidden');
+        }
+
+        function closeHintModal() {
+            playSound('click');
+            document.getElementById('hint-modal').classList.add('hidden');
+        }
+
+        // Initialize App on Load
+        window.onload = function() {
+            console.log("Petualangan Koki Pecahan Loaded Successfully!");
+        };
+    </script>
+</body>
+</html>
